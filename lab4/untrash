@@ -1,0 +1,48 @@
+#!/bin/bash
+
+file=$1
+arguments=$#
+trash=/home/user/.trash
+log=/home/user/.trash.log
+path=/home/user/first/lab4/
+
+if [ $arguments != 1 ] || [[ ! -e $log ]] || [[ ! -d $trash ]]
+then
+	echo "Arguments != 1 or trash is empty"
+	exit
+fi
+
+for line in $(grep -h $file $log)
+do
+	filename=$(echo $line | awk -F "=" '{print $1}')
+	fileintrash=$(echo $line | awk -F "=" '{print $2}')
+	newfile=$trash/$fileintrash
+	echo "$newfile"
+	if [[ -e $newfile ]]
+	then
+		echo "Save '$filename' y/n?"
+		read agree
+		case $agree in
+		"y")
+			if [[ -e $file ]]
+			then
+				echo "write new Name"
+				read createfile
+				ln "$newfile" "$path/$createfile"
+			else
+				ln "$newfile" "$filename"
+			fi
+			rm $newfile
+			break;;
+		"n")
+			continue;;
+		*)
+			echo "You input $agree instead y/n"
+			exit;;
+		esac
+	else
+		echo "Not found $newfile"
+	fi
+
+done
+

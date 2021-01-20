@@ -1,0 +1,52 @@
+#!/bin/bash
+
+myhome=/home/user
+back=/home/user/backup-report
+
+nowdate=$(date +"%Y-%m-%d")
+nowtime=$(date -d "$nowdate" +"%s")
+newfiledate=/home/user/Backup-$nowdate
+
+
+lastdate=$(find /home/user/ -name "Backup*" | awk 'BEGIN{FS="-"; OFS="-"}{print $2,$3,$4}' | sort -n | tail -1)
+lasttime=$(date -d "$lastdate" +"%s")
+lastdatedir=/home/user/Backup-${lastdate}
+
+if [[ ! -f $back ]]; then
+	mkdir $back
+fi
+
+time=$(echo "($nowtime - $lasttime) / 60 / 60 / 24" | bc)
+
+if (( $time > 7 )) || [[ -z "lastdate" ]]; then
+	mkdir "$myhome/Backup-$nowdate"
+	for filesource in $(ls $myhome/source); do
+		cp $myhome/source/$filesource $newfiledate
+	done
+	files=$(ls $myhome/source | sed "s/^/\t")
+	echo -e "We_$(nowdate)_make_file_\n$(files)" >> $myhome/backup-report
+else
+	dif=" "
+	for filesource in $(ls $myhome/source); do
+		if [[ -f $lastdatedir/$filesource ]]; then
+			ssize=$(wc -c $myhome/source/filesource | awk '{print $1}')
+			bsize=$(wc -c $lastdatedir/filesource | awk '{print $1}')
+			
+			size=$(echo "${ssize} - ${bsize}" | bc)
+			
+			if ( $size != 0 )
+			then
+				mv $lastdatedir/filesource $lastdatedir/$filesource.$nowdate
+				cp $myhome/source/$filesource $lastdatedir
+				dif="${dif}\n\t_files_$filesource_new_$filesource.$nowdate;"
+			fi
+		else
+			cp $myhome/source/$filesource $lastdatedir
+			dif="${dif}\n\t_addfile_$filesource;"
+		fi
+	done
+	dif=$(echo $dif | sed 's/^\\n//')
+	if [[ ! -z "$dif" ]]; then
+		echo -e "We_${lastdate}_addfiles\n${dif}" >> $myhome/backup-report
+	fi
+fi

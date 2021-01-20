@@ -1,0 +1,28 @@
+#!/bin/bash
+
+file=$1
+arguments=$#
+newfilename=1
+trash=/home/user/.trash
+
+if [ arguments != 1 ]
+then
+	if [ -f $file ]
+	then
+		if [ -d $trash ]
+		then
+			newfilename=$(ls -r $trash | head -1)
+			let newfilename++
+		else
+			mkdir $trash
+			touch /home/user/.trash.log
+		fi
+		ln "$PWD/$file" "$trash/$newfilename"
+		rm -f $file
+			echo "$PWD/$file=$newfilename" >> /home/user/.trash.log
+	else
+		echo "File not found"
+	fi
+else
+	echo "Arguments not 1"
+fi
