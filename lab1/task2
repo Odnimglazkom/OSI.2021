@@ -1,0 +1,10 @@
+#!/bin/bash
+b=""
+read a
+while [[ "$a" != "q" ]]
+do
+b="$b$a"
+read a
+fi
+done
+echo "$b"
