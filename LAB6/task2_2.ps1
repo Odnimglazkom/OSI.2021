@@ -1,0 +1,1 @@
+robocopy C:\Windows\Media A:\ /Z

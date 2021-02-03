@@ -1,0 +1,21 @@
+Узнаем имя хоста
+HOSTNAME
+
+Имя нашего хоста
+DESKTOP-PRCA79H
+
+Создаем сетеввую папку
+net use a: "\\DESKTOP-PRCA79H\temp"
+
+Запускаем копирование файлов
+powershell -executionpolicy RemoteSigned -file C:\LAB6\task2_2.ps1
+
+Запускаем копирование файлов через минуту
+powershell -executionpolicy RemoteSigned -file C:\LAB6\task2_3.ps1
+
+прерываем предыдущую задачу: нажимаем ctrl+c
+
+и снова запуускаем копирование файлов
+powershell -executionpolicy RemoteSigned -file C:\LAB6\task2_2.ps1
+
+Как видим оно продолжается, а не начинается заново

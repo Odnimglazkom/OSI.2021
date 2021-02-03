@@ -1,0 +1,6 @@
+  
+список всех запущенных служб
+driverquery > C:\LAB6\DRIVERS.log
+
+список всех запущенных служб отсортированным в обратном алфавитном порядке
+sort /r C:\LAB6\DRIVERS.log > C:\LAB6\drivers_reverse.log

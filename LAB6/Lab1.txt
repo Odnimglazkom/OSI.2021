@@ -1,0 +1,20 @@
+
+Версия ПК
+VER > C:\LAB6\Info.txt
+
+Памяти на жестких дисках (запускать в командной строке от имени администратора)
+chkdsk | find "на диске." > C:\LAB6\mem.txt
+
+Создать директорию TEST
+md TEST
+
+перенести файлы в папку TEST
+move Info.txt TEST
+move mem.txt TEST
+
+Делаем общий файл
+copy mem.txt+Info.txt answer.txt
+
+удаляем файлы
+del Info.txt
+del mem.txt
